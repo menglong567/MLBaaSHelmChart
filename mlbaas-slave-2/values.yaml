@@ -1,0 +1,22 @@
+# Default values for mlbaas-slave-2.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: 127.0.0.1:5000/multichain-slave:1.1.0
+  pullPolicy: IfNotPresent
+
+chainName: DemoChain
+
+masterNodeName: demobaasmasternode #should be lower case
+masterNodeNamespace: demobaasmasternode-namespace #should be lower case
+slaveNodeName_2: demobaasslavenode-2
+slaveNodeNamespace_2: demobaasslavenode-2-namespace
+slaveNodeMemoryRequest_2: 400
+slaveNodeCpuRequest_2: 400
+slaveNodeMemoryLimit_2: 400
+slaveNodeCpuLimit_2: 400
+slaveNodeNodeportnetworkPort_2: 31104
+slaveNodeNodeportrpcPort_2: 31105

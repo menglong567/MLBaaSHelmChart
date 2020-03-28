@@ -1,0 +1,17 @@
+# Default values for multichain-client.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: 127.0.0.1:5000/multichain-client:1.1.0
+  pullPolicy: IfNotPresent
+
+
+multichainClientNamespace: multichainclient-ns #should be lower case
+multichainClientMemoryRequest: 400
+multichainClientCpuRequest: 400
+multichainClientMemoryLimit: 400
+multichainClientCpuLimit: 400
+multichainClientNodeport: 31081

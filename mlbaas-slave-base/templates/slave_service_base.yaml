@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: {{ .Values.slaveNodeName}}-nodeport #nodeport service name
+    namespace: {{ .Values.slaveNodeNamespace}}
+    labels:
+        app: {{ .Values.slaveNodeName}}-nodeport
+spec:
+    type: NodePort #表明这个service类型是nodeport
+    ports:
+        - port: 10000  #network port
+          nodePort: {{ .Values.slaveNodeNodeportnetworkPort}}
+          name: network
+        - port: 10001  #rpc port
+          nodePort: {{ .Values.slaveNodeNodeportrpcPort}}
+          name: rpc
+    selector:
+        app: {{ .Values.slaveNodeName}}   # should match the selector.matchLabels  for StatefulSet which is 'app: ${slaveNodeName}'

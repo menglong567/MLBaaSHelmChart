@@ -1,0 +1,56 @@
+apiVersion: apps/v1  #Deployment and StatefulSet is defined in apps/v1 not in corev1
+kind: StatefulSet
+metadata:
+    name: {{ .Values.masterNodeName}} #StatefulSet name
+    namespace: {{ .Values.masterNodeNamespace}}   #should be int the same namespace as headless service
+    labels:
+        app: {{ .Values.masterNodeName}}
+
+spec:
+    serviceName: {{ .Values.masterNodeName}} #Headless Service name, will be used to generate the pod name
+    replicas: 1         #we only need 1 master
+    podManagementPolicy: Parallel     #default is OrderedReady
+    selector:
+        matchLabels:
+            app: {{ .Values.masterNodeName}}  #used to identify the service
+    template:
+        metadata:
+            labels:
+                app: {{ .Values.masterNodeName}}
+        spec:
+            dnsConfig: {}
+            dnsPolicy: ClusterFirst
+            restartPolicy: Always
+            schedulerName: default-scheduler
+            terminationGracePeriodSeconds: 10
+            containers:
+                - name: multichain-{{ .Values.masterNodeName}}
+                  image: {{ .Values.image.repository}}
+                  imagePullPolicy: {{ .Values.image.pullPolicy}}
+                  command: ["/bin/bash","/root/setup-master.sh"]
+                  args: ["/home/multichain-{{ .Values.masterNodeName}}/data","{{ .Values.chainName}}","10000","10001"] #datadir chainname port rpcport
+                  ports:
+                      - name: network
+                        containerPort: 10000 #in really system end user can give this value dynamically
+                      - name: rpc
+                        containerPort: 10001 #in really system end user can give this value dynamically
+                  volumeMounts:
+                      - mountPath: /home/multichain-{{ .Values.masterNodeName}}/data  #directory in docker container
+                        name: data
+                  env:
+                      - name: POD_NAME
+                        valueFrom:
+                            fieldRef:
+                                fieldPath: metadata.name
+                  resources:
+                      requests:
+                          memory: "{{ .Values.masterNodeMemoryRequest}}Mi" # ${memoryRequest}
+                          cpu: "{{ .Values.masterNodeCpuRequest}}m" # ${cpuRequest}
+                      limits:
+                          memory: "{{ .Values.masterNodeMemoryLimit}}Mi" #${memoryLimit}
+                          cpu: "{{ .Values.masterNodeCpuLimit}}m"    # ${cpuLimit}
+            volumes:
+                - name: data
+                  hostPath:
+                      path: /home/multichain-{{ .Values.masterNodeName}}-k8s/data  # directory location on host
+                      type: DirectoryOrCreate  # this could be Directory / DirectoryOrCreate

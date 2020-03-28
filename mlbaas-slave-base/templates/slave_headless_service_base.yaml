@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: {{ .Values.slaveNodeName}} # headless service name, will be used to be part of the DNS name
+    namespace: {{ .Values.slaveNodeNamespace}}
+    labels:
+        app: {{ .Values.slaveNodeName}}
+spec:
+    clusterIP: None  #表明这是一个headless service
+    ports:
+        - name: network #network port
+          port: 10000 #in really system end user can give this value
+          targetPort: 10000 #in really system end user can give this value dynamically
+        - name: rpc # rpc port
+          port: 10001   #in really system end user can give this value
+          targetPort: 10001 #in really system end user can give this value dynamically
+    selector:
+        app: {{ .Values.slaveNodeName}} # should match the selector.matchLabels  for StatefulSet  which is 'app: ${slaveNodeName}'

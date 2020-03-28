@@ -1,0 +1,49 @@
+apiVersion: apps/v1  #Deployment and StatefulSet is defined in apps/v1 not in corev1
+kind: Deployment
+metadata:
+    name: multichainclient   #name of the deployment
+    namespace: {{ .Values.multichainClientNamespace}}
+    labels:
+        app: multichainclient
+spec:
+    replicas: {{ .Values.replicaCount}}  #for testing purpose i set to 1
+    selector:
+        matchLabels:
+            app: multichainclient
+    template:
+        metadata:
+            labels:
+                app: multichainclient
+        spec:
+            dnsConfig: {}
+            dnsPolicy: ClusterFirst
+            restartPolicy: Always
+            schedulerName: default-scheduler
+            terminationGracePeriodSeconds: 10    #当删除Pod时，等待时间
+            containers:
+                - name: multichainclient
+                  image: {{ .Values.image.repository}}
+                  imagePullPolicy: {{ .Values.image.pullPolicy}}
+                  ports:
+                      - name: port
+                        containerPort: 9081
+                  volumeMounts:
+                      - mountPath: /logs  #directory in docker container
+                        name: log
+                  env:
+                      - name: APP_NAME
+                        value: "multichainclient-server"
+                      - name: server.port
+                        value: "9081"
+                  resources:
+                      requests:
+                          memory: "{{ .Values.multichainClientMemoryRequest}}Mi"
+                          cpu: "{{ .Values.multichainClientCpuRequest}}m"
+                      limits:
+                          memory: "{{ .Values.multichainClientMemoryLimit}}Mi"
+                          cpu: "{{ .Values.multichainClientCpuLimit}}m"
+            volumes:
+                - name: log
+                  hostPath:
+                      path: /home/multichainclient-service-k8s/logs  # directory location on host
+                      type: DirectoryOrCreate
