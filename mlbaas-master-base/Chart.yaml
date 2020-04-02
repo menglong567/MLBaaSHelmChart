@@ -1,6 +1,6 @@
 apiVersion: v2
 name: mlbaas-master-base
-description: A Helm chart for Kubernetes
+description: A Helm chart for Kubernetes for multchain network master node . With this chart template you can deploy master node for multichain network by setting your own parameters
 
 # A chart can be either an 'application' or a 'library' chart.
 #

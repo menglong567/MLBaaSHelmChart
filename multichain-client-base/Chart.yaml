@@ -1,6 +1,6 @@
 apiVersion: v2
 name: multichain-client-base
-description: A Helm chart for Kubernetes
+description: A Helm chart for Kubernetes resource multichain-client-base. With this chart template you can deploy the multichain-client server to operate the multichain network nodes
 
 # A chart can be either an 'application' or a 'library' chart.
 #
