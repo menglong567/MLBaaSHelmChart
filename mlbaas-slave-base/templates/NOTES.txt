@@ -1,2 +1,11 @@
-1. Get the application URL by running these commands:
+1:After this chart deployed successfully the multichain network slave node is successfully setup
+2:The chain name is <chainName>, this name should be the same as you provide when you setup the master node
+3:The master node name is <slaveNodeName>
+4:The kubernetes namespace for this slave node is <slaveNodeNamespace>
+5:The network port used for peer-2-peer connection between multichain nodes is <slaveNodeNodeportnetworkPort>
+6:The rpc port used for remote API invocation is <slaveNodeNodeportrpcPort>
+7:Please visit the directory /home/multichain-<slaveNodeName>/data/<chainName> in the docker container (or /home/multichain-<slaveNodeName>-k8s/data/<chainName> on the host node) and check the multichain.conf file to get the default rpcuser and default rpcpassword for further api invocation
 
+
+Enter the interactive mode:
+multichain-cli -datadir=/home/multichain-<slaveNodeName>/data <chainName>

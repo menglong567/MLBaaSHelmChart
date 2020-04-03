@@ -1,2 +1,2 @@
-1. Get the application URL by running these commands:
-
+1. After this chart deployed successfully you can visit the swagger-ui page from http://<nodeIP>:<multichainClientNodeport>/multichain-client/swagger-ui.html
+2. The kubernetes namespace for multichain-client service is <multichainClientNamespaces>
